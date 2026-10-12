@@ -4,7 +4,7 @@ import { makeItem } from "../fixtures/content";
 
 describe("interleave", () => {
   it("alternates between lists and keeps leftovers from longer lists", () => {
-    expect(interleave([[1, 2, 3], ["a"], [true, false]])).toEqual([1, "a", true, 2, false, 3]);
+    expect(interleave<number | string | boolean>([[1, 2, 3], ["a"], [true, false]])).toEqual([1, "a", true, 2, false, 3]);
   });
 
   it("handles no lists and empty lists", () => {
