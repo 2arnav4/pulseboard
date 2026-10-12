@@ -1,5 +1,6 @@
-export const AVATAR_COLORS = ["indigo", "emerald", "rose", "amber", "sky", "violet"] as const;
-export type AvatarColor = (typeof AVATAR_COLORS)[number];
+import type { AvatarColor } from "@/types/user";
+
+export { AVATAR_COLORS, type AvatarColor } from "@/types/user";
 
 export interface UserRecord {
   id: string;

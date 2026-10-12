@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: the `dark` class on <html> switches every token below. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens as CSS custom properties. Components only use the Tailwind
+ * aliases (bg-surface, text-muted, ...), so dark mode is a single class swap.
+ * Text/background pairs meet WCAG AA (4.5:1) in both themes.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface-2: #eef0f6;
+  --border: #dde1ea;
+  --text: #111827;
+  --muted: #4b5563;
+  --accent: #4338ca;
+  --accent-hover: #3730a3;
+  --accent-contrast: #ffffff;
+  --accent-soft: #e0e7ff;
+  --danger: #b91c1c;
+  --success: #047857;
+  --news: #0369a1;
+  --movie: #b45309;
+  --social: #7e22ce;
+  --ring: #6366f1;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0b1020;
+  --surface: #121a2e;
+  --surface-2: #1a2440;
+  --border: #2a3654;
+  --text: #e8ebf3;
+  --muted: #a6b0c5;
+  --accent: #a5b4fc;
+  --accent-hover: #c7d2fe;
+  --accent-contrast: #0b1020;
+  --accent-soft: #232c55;
+  --danger: #fca5a5;
+  --success: #6ee7b7;
+  --news: #7dd3fc;
+  --movie: #fcd34d;
+  --social: #d8b4fe;
+  --ring: #a5b4fc;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-news: var(--news);
+  --color-movie: var(--movie);
+  --color-social: var(--social);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+/* One visible focus style for every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }

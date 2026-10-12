@@ -1,5 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
-import { AVATAR_COLORS, type AvatarColor } from "@/lib/server/users/types";
+import { AVATAR_COLORS, type AvatarColor } from "@/types/user";
 
 function isAvatarColor(value: unknown): value is AvatarColor {
   return typeof value === "string" && (AVATAR_COLORS as readonly string[]).includes(value);

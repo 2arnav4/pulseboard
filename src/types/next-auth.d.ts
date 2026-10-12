@@ -1,5 +1,5 @@
 import type { DefaultSession } from "next-auth";
-import type { AvatarColor } from "@/lib/server/users/types";
+import type { AvatarColor } from "@/types/user";
 
 declare module "next-auth" {
   interface Session {

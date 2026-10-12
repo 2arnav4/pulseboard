@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { contentApi } from "@/features/api/contentApi";
+import appReducer from "@/features/app/appSlice";
 import favoritesReducer from "@/features/favorites/favoritesSlice";
 import feedReducer from "@/features/feed/feedSlice";
 import historyReducer from "@/features/history/historySlice";
@@ -8,6 +9,7 @@ import searchReducer from "@/features/search/searchSlice";
 import type { PersistedState } from "@/lib/persistence";
 
 export const rootReducer = combineReducers({
+  app: appReducer,
   preferences: preferencesReducer,
   favorites: favoritesReducer,
   feed: feedReducer,
