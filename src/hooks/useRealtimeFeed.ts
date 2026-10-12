@@ -16,17 +16,15 @@ export function useRealtimeFeed(): RealtimeStatus {
   const hydrated = useAppSelector((state) => state.app.hydrated);
   const enabled = useAppSelector((state) => state.preferences.realtimeEnabled);
   const categories = useAppSelector((state) => state.preferences.categories);
-  const [status, setStatus] = useState<RealtimeStatus>("off");
-  const categoryKey = categories.join(",");
+  const url = `/api/realtime?categories=${encodeURIComponent(categories.join(","))}`;
+  const active = hydrated && enabled;
+  // The URL whose stream is currently open; status is derived from it, so no setState runs in the effect body.
+  const [connectedUrl, setConnectedUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!hydrated || !enabled || typeof EventSource === "undefined") {
-      setStatus("off");
-      return;
-    }
-    setStatus("connecting");
-    const source = new EventSource(`/api/realtime?categories=${encodeURIComponent(categoryKey)}`);
-    source.addEventListener("ready", () => setStatus("live"));
+    if (!active || typeof EventSource === "undefined") return;
+    const source = new EventSource(url);
+    source.addEventListener("ready", () => setConnectedUrl(url));
     source.addEventListener("post", (event) => {
       try {
         dispatch(liveItemReceived(JSON.parse((event as MessageEvent<string>).data) as ContentItem));
@@ -34,9 +32,10 @@ export function useRealtimeFeed(): RealtimeStatus {
         // Ignore a malformed frame rather than breaking the stream.
       }
     });
-    source.onerror = () => setStatus("connecting");
+    source.onerror = () => setConnectedUrl(null);
     return () => source.close();
-  }, [dispatch, hydrated, enabled, categoryKey]);
+  }, [dispatch, active, url]);
 
-  return status;
+  if (!active) return "off";
+  return connectedUrl === url ? "live" : "connecting";
 }

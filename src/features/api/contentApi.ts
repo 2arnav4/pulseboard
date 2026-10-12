@@ -32,7 +32,7 @@ export const contentApi = createApi({
   keepUnusedDataFor: 300,
   endpoints: (build) => ({
     getFeed: build.infiniteQuery<ContentPage, FeedArgs, number>({
-      infiniteQueryOptions: { initialPageParam: 1, getNextPageParam: nextPage, maxPages: 10 },
+      infiniteQueryOptions: { initialPageParam: 1, getNextPageParam: nextPage },
       query: ({ queryArg, pageParam }) => ({
         url: "/feed",
         params: {

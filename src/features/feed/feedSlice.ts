@@ -12,9 +12,14 @@ export interface FeedState {
   pendingLive: ContentItem[];
   /** Real-time posts the user has revealed; rendered above the regular feed. */
   liveItems: ContentItem[];
+  /**
+   * Movie that seeds "because you liked" recommendations, fixed at load time so that
+   * favoriting a movie mid-session does not reset the feed under the user.
+   */
+  seedMovieId: number | null;
 }
 
-const initialState: FeedState = { order: [], pendingLive: [], liveItems: [] };
+const initialState: FeedState = { order: [], pendingLive: [], liveItems: [], seedMovieId: null };
 
 const feedSlice = createSlice({
   name: "feed",
@@ -39,6 +44,7 @@ const feedSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(hydrateFromStorage, (state, action) => {
       if (action.payload.feedOrder) state.order = action.payload.feedOrder;
+      state.seedMovieId = action.payload.history?.movieIds[0] ?? null;
     });
   },
 });

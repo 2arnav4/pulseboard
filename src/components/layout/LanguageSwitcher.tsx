@@ -9,16 +9,19 @@ function isLanguage(value: string): value is Language {
   return (LANGUAGES as readonly string[]).includes(value);
 }
 
-export function LanguageSwitcher({ id = "language-switcher" }: { id?: string }) {
+/** `withLabel={false}` when the caller renders its own visible <label htmlFor={id}>. */
+export function LanguageSwitcher({ id = "language-switcher", withLabel = true }: { id?: string; withLabel?: boolean }) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const language = useAppSelector((state) => state.preferences.language);
 
   return (
     <div className="relative flex items-center">
-      <label htmlFor={id} className="sr-only">
-        {t("header.language")}
-      </label>
+      {withLabel && (
+        <label htmlFor={id} className="sr-only">
+          {t("header.language")}
+        </label>
+      )}
       <Languages aria-hidden="true" className="pointer-events-none absolute left-2.5 size-4 text-muted" />
       <select
         id={id}
