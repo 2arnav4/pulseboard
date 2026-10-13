@@ -13,6 +13,8 @@ test.describe("preferences", () => {
     await expect(html).toHaveClass(/dark/);
     await page.reload();
     await expect(html).toHaveClass(/dark/);
+    // Regression: after a full load the settings switch must match the saved theme.
+    await expect(page.getByRole("switch", { name: "Dark mode" })).toHaveAttribute("aria-checked", "true");
   });
 
   test("category choices personalize the feed and persist", async ({ page }) => {
