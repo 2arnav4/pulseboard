@@ -17,7 +17,7 @@ test.describe("authentication", () => {
     await page.getByLabel("Email").fill("demo@pulseboard.app");
     await page.getByLabel("Password").fill("wrong-password");
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page.getByRole("alert")).toHaveText("Incorrect email or password.");
+    await expect(page.getByRole("main").getByRole("alert")).toHaveText("Incorrect email or password.");
     await expect(page).toHaveURL(/\/login/);
   });
 
