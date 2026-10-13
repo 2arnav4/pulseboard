@@ -24,13 +24,13 @@ export function Switch({ id, checked, onChange, labelledBy, describedBy }: Switc
       onClick={() => onChange(!checked)}
       className={clsx(
         "relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border-2 border-transparent transition-colors",
-        checked ? "bg-accent" : "bg-muted/40",
+        checked ? "bg-ink" : "bg-border",
       )}
     >
       <motion.span
         layout
         transition={{ type: "spring", stiffness: 600, damping: 35 }}
-        className={clsx("size-6 rounded-full bg-white shadow", checked ? "ml-auto" : "ml-0")}
+        className={clsx("size-6 rounded-full", checked ? "ml-auto bg-ink-contrast" : "ml-0 bg-surface")}
       />
     </button>
   );

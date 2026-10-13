@@ -1,6 +1,5 @@
 "use client";
 
-import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
@@ -16,11 +15,11 @@ import { Switch } from "./Switch";
 
 function Panel({ title, children, id }: { title: string; children: ReactNode; id: string }) {
   return (
-    <section aria-labelledby={id} className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
-      <h2 id={id} className="mb-4 text-lg font-semibold">
+    <section aria-labelledby={id} className="grid gap-4 border-b border-border pb-8 md:grid-cols-[14rem_1fr] md:gap-10">
+      <h2 id={id} className="font-serif text-2xl">
         {title}
       </h2>
-      {children}
+      <div>{children}</div>
     </section>
   );
 }
@@ -34,7 +33,7 @@ export function SettingsView() {
   return (
     <div>
       <PageHeader title={t("settings.title")} subtitle={t("settings.subtitle")} />
-      <div className="grid gap-6">
+      <div className="grid gap-8">
         <Panel id="settings-categories" title={t("settings.categories")}>
           <fieldset>
             <legend className="mb-4 text-sm text-muted">{t("settings.categoriesHelp")}</legend>
@@ -47,7 +46,7 @@ export function SettingsView() {
                     key={category}
                     className={clsx(
                       "relative inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
-                      selected ? "border-accent bg-accent-soft text-accent" : "border-border text-muted hover:text-text",
+                      selected ? "border-ink bg-ink text-ink-contrast" : "border-border text-muted hover:border-text hover:text-text",
                       isLast && "cursor-not-allowed",
                     )}
                   >
@@ -58,7 +57,6 @@ export function SettingsView() {
                       disabled={isLast}
                       onChange={() => dispatch(toggleCategory(category))}
                     />
-                    {selected && <Check aria-hidden="true" className="size-4" />}
                     {t(`categories.${category}`)}
                   </label>
                 );
@@ -70,7 +68,7 @@ export function SettingsView() {
         <Panel id="settings-appearance" title={t("settings.appearance")}>
           <div className="flex flex-col gap-5">
             <div className="flex items-center justify-between gap-4">
-              <span id="dark-mode-label" className="text-sm font-medium">
+              <span id="dark-mode-label" className="text-[0.95rem]">
                 {t("settings.darkMode")}
               </span>
               <Switch
@@ -81,14 +79,14 @@ export function SettingsView() {
               />
             </div>
             <div className="flex items-center justify-between gap-4">
-              <label htmlFor="settings-language" className="text-sm font-medium">
+              <label htmlFor="settings-language" className="text-[0.95rem]">
                 {t("settings.language")}
               </label>
               <LanguageSwitcher id="settings-language" withLabel={false} />
             </div>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <span id="realtime-label" className="text-sm font-medium">
+                <span id="realtime-label" className="text-[0.95rem]">
                   {t("settings.realtime")}
                 </span>
                 <p id="realtime-help" className="text-sm text-muted">

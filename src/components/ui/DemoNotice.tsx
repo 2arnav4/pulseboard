@@ -1,6 +1,5 @@
 "use client";
 
-import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ContentPage, ContentSource } from "@/types/content";
 
@@ -14,8 +13,7 @@ export function DemoNotice({ sources }: { sources: ContentPage["sources"] | unde
   if (demoSources.length === 0) return null;
   const names = demoSources.map((source) => t(`card.source.${source}`)).join(", ");
   return (
-    <p className="flex items-start gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm text-muted">
-      <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+    <p className="border-l-2 border-accent py-1 pl-3 text-sm text-muted">
       {t("state.demoNotice", { sources: names })}
     </p>
   );

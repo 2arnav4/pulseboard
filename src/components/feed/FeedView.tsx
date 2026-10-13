@@ -1,11 +1,11 @@
 "use client";
 
-import { RotateCcw, Settings } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { clsx } from "clsx";
 import { ContentCard } from "@/components/content/ContentCard";
-import { Button } from "@/components/ui/Button";
+import { BUTTON_BASE, BUTTON_VARIANTS, Button } from "@/components/ui/Button";
 import { DemoNotice } from "@/components/ui/DemoNotice";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorState } from "@/components/ui/ErrorState";
@@ -65,7 +65,6 @@ export function FeedView() {
           <RealtimeIndicator status={realtimeStatus} />
           {order.length > 0 && (
             <Button variant="secondary" onClick={() => dispatch(resetFeedOrder())}>
-              <RotateCcw aria-hidden="true" className="size-4" />
               {t("feed.resetOrder")}
             </Button>
           )}
@@ -105,8 +104,7 @@ export function FeedView() {
           title={t("state.emptyTitle")}
           body={t("state.emptyBody")}
           action={
-            <Link href="/settings" className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-accent px-4 text-sm font-medium text-accent-contrast hover:bg-accent-hover">
-              <Settings aria-hidden="true" className="size-4" />
+            <Link href="/settings" className={clsx(BUTTON_BASE, BUTTON_VARIANTS.primary)}>
               {t("nav.settings")}
             </Link>
           }
@@ -123,7 +121,7 @@ export function FeedView() {
 
       {liveItems.length > 0 && (
         <div>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">{t("feed.liveSection")}</h2>
+          <h2 className="mb-3 text-[11px] font-medium uppercase tracking-[0.14em] text-accent">{t("feed.liveSection")}</h2>
           <ul aria-label={t("feed.liveSection")} className="flex flex-col gap-4">
             {liveItems.map((item) => (
               <li key={item.id}>
@@ -134,7 +132,7 @@ export function FeedView() {
         </div>
       )}
 
-      <p className="text-sm text-muted">{t("feed.dragHint")}</p>
+      <p className="text-xs text-muted">{t("feed.dragHint")}</p>
       <SortableFeedList items={orderedItems} label={t("feed.title")} />
 
       <div ref={sentinelRef} className="flex min-h-16 items-center justify-center py-4">

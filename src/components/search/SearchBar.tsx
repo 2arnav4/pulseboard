@@ -1,9 +1,9 @@
 "use client";
 
-import { Search, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { CloseGlyph, SearchGlyph } from "@/components/ui/icons";
 import { setSearchQuery } from "@/features/search/searchSlice";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -66,7 +66,7 @@ export function SearchBar() {
       <label htmlFor="global-search" className="sr-only">
         {t("header.searchLabel")}
       </label>
-      <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
+      <SearchGlyph className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" />
       <input
         ref={inputRef}
         id="global-search"
@@ -79,19 +79,19 @@ export function SearchBar() {
         placeholder={t("header.searchPlaceholder")}
         autoComplete="off"
         maxLength={100}
-        className="h-11 w-full rounded-xl border border-border bg-surface-2 pl-10 pr-16 text-sm text-text placeholder:text-muted focus:border-accent focus:bg-surface focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+        className="h-10 w-full rounded-full border border-border bg-surface pl-10 pr-14 text-sm text-text transition-colors placeholder:text-muted hover:border-muted/60 focus:border-text focus:outline-none [&::-webkit-search-cancel-button]:hidden"
       />
       {value ? (
         <button
           type="button"
           onClick={clear}
           aria-label={t("header.clearSearch")}
-          className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted hover:bg-surface hover:text-text"
+          className="absolute right-1.5 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-surface-2 hover:text-text"
         >
-          <X aria-hidden="true" className="size-4" />
+          <CloseGlyph className="size-3.5" />
         </button>
       ) : (
-        <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-border px-1.5 text-xs text-muted sm:block">
+        <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md border border-border px-1.5 font-mono text-[11px] text-muted sm:block">
           /
         </kbd>
       )}

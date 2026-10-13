@@ -48,7 +48,7 @@ export function SignupForm() {
       footer={
         <>
           {t("auth.haveAccount")}{" "}
-          <Link href="/login" className="font-medium text-accent underline-offset-4 hover:underline">
+          <Link href="/login" className="font-medium text-text underline decoration-border underline-offset-4 hover:decoration-text">
             {t("auth.login")}
           </Link>
         </>

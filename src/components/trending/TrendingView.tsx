@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Film, MessageCircle, Newspaper } from "lucide-react";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
@@ -14,8 +13,6 @@ import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { Spinner } from "@/components/ui/Spinner";
 import { useGetTrendingQuery } from "@/features/api/contentApi";
 import { CONTENT_SOURCES, type ContentSource } from "@/types/content";
-
-const TAB_ICONS = { news: Newspaper, movie: Film, social: MessageCircle } as const;
 
 /** Trending news, movies and posts in an accessible tab set (arrow keys move between tabs). */
 export function TrendingView() {
@@ -38,9 +35,8 @@ export function TrendingView() {
     <section>
       <PageHeader title={t("trending.title")} subtitle={t("trending.subtitle")} />
 
-      <div role="tablist" aria-label={t("trending.tabsLabel")} onKeyDown={onKeyDown} className="mb-6 inline-flex gap-1 rounded-2xl border border-border bg-surface p-1">
+      <div role="tablist" aria-label={t("trending.tabsLabel")} onKeyDown={onKeyDown} className="mb-8 flex gap-6 border-b border-border">
         {CONTENT_SOURCES.map((source) => {
-          const Icon = TAB_ICONS[source];
           const selected = source === active;
           return (
             <button
@@ -55,11 +51,10 @@ export function TrendingView() {
               aria-controls="trending-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(source)}
-              className={clsx("relative inline-flex min-h-10 items-center gap-2 rounded-xl px-4 text-sm font-medium", selected ? "text-accent" : "text-muted hover:text-text")}
+              className={clsx("relative -mb-px inline-flex min-h-11 items-center pb-1 text-[0.95rem] transition-colors", selected ? "font-medium text-text" : "text-muted hover:text-text")}
             >
-              {selected && <motion.span layoutId="trending-tab" className="absolute inset-0 rounded-xl bg-accent-soft" />}
-              <Icon aria-hidden="true" className="relative size-4" />
-              <span className="relative">{t(`trending.tabs.${source}`)}</span>
+              {selected && <motion.span layoutId="trending-tab" aria-hidden="true" className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-accent" />}
+              <span>{t(`trending.tabs.${source}`)}</span>
             </button>
           );
         })}

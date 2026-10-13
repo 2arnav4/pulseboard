@@ -1,4 +1,3 @@
-import { Loader2 } from "lucide-react";
 import { clsx } from "clsx";
 
 interface SpinnerProps {
@@ -6,11 +5,11 @@ interface SpinnerProps {
   className?: string;
 }
 
-/** Accessible loading indicator: the label is announced, the icon is decorative. */
+/** Accessible loading indicator: the label is announced, the ring is decorative. */
 export function Spinner({ label, className }: SpinnerProps) {
   return (
-    <span role="status" className={clsx("inline-flex items-center gap-2 text-sm text-muted", className)}>
-      <Loader2 aria-hidden="true" className="size-5 animate-spin text-accent" />
+    <span role="status" className={clsx("inline-flex items-center gap-2.5 text-sm text-muted", className)}>
+      <span aria-hidden="true" className="size-4 animate-spin rounded-full border-[1.5px] border-border border-t-text" />
       <span>{label}</span>
     </span>
   );

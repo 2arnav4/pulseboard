@@ -1,10 +1,10 @@
 "use client";
 
 import { Reorder, useDragControls } from "framer-motion";
-import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ContentCard } from "@/components/content/ContentCard";
+import { DownGlyph, GripGlyph, UpGlyph } from "@/components/ui/icons";
 import { setFeedOrder } from "@/features/feed/feedSlice";
 import { useAppDispatch } from "@/store/hooks";
 import type { ContentItem } from "@/types/content";
@@ -22,7 +22,7 @@ function SortableFeedItem({ item, index, total, onMove }: ItemProps) {
   const controls = useDragControls();
 
   const controlClass =
-    "inline-flex size-9 items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-text disabled:opacity-30 disabled:hover:bg-transparent";
+    "inline-flex size-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-text disabled:opacity-30 disabled:hover:bg-transparent";
 
   return (
     <Reorder.Item
@@ -31,8 +31,8 @@ function SortableFeedItem({ item, index, total, onMove }: ItemProps) {
       dragListener={false}
       dragControls={controls}
       data-testid="feed-item"
-      className="relative list-none"
-      whileDrag={{ scale: 1.02, zIndex: 10, boxShadow: "0 20px 40px rgba(0,0,0,0.18)" }}
+      className="relative list-none rounded-3xl"
+      whileDrag={{ scale: 1.02, zIndex: 10, boxShadow: "0 18px 40px -16px rgba(0,0,0,0.3)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -48,7 +48,7 @@ function SortableFeedItem({ item, index, total, onMove }: ItemProps) {
               disabled={index === 0}
               aria-label={t("card.moveUp", { title: item.title })}
             >
-              <ChevronUp aria-hidden="true" className="size-5" />
+              <UpGlyph className="size-4" />
             </button>
             <button
               type="button"
@@ -57,16 +57,16 @@ function SortableFeedItem({ item, index, total, onMove }: ItemProps) {
               disabled={index === total - 1}
               aria-label={t("card.moveDown", { title: item.title })}
             >
-              <ChevronDown aria-hidden="true" className="size-5" />
+              <DownGlyph className="size-4" />
             </button>
             <span
               role="img"
               data-testid="drag-handle"
               aria-label={t("card.dragHandle", { title: item.title })}
               onPointerDown={(event) => controls.start(event)}
-              className="inline-flex size-9 cursor-grab touch-none items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-text active:cursor-grabbing"
+              className="inline-flex size-9 cursor-grab touch-none items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-2 hover:text-text active:cursor-grabbing"
             >
-              <GripVertical aria-hidden="true" className="size-5" />
+              <GripGlyph className="size-4" />
             </span>
           </>
         }

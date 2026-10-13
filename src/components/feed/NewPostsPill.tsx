@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { revealLiveItems } from "@/features/feed/feedSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -28,10 +27,10 @@ export function NewPostsPill() {
               dispatch(revealLiveItems());
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className="inline-flex min-h-10 items-center gap-2 rounded-full bg-accent px-4 text-sm font-medium text-accent-contrast shadow-lg hover:bg-accent-hover"
+            className="num inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-medium text-ink-contrast shadow-[0_10px_30px_-10px_rgb(0_0_0/0.35)] transition-colors hover:bg-accent hover:text-accent-contrast"
           >
-            <ArrowUp aria-hidden="true" className="size-4" />
             {t("feed.newPosts", { count })}
+            <span aria-hidden="true">↑</span>
           </button>
         </motion.div>
       )}

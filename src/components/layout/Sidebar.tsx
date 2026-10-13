@@ -1,23 +1,24 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
+import { CloseGlyph } from "@/components/ui/icons";
+import { Logo } from "@/components/ui/Logo";
 import { useAppSelector } from "@/store/hooks";
-import { NAV_ITEMS } from "./navItems";
+import { ACCOUNT_NAV_ITEMS, NAV_ITEMS, type NavItem } from "./navItems";
 
-function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+function NavList({ items, onNavigate, large }: { items: readonly NavItem[]; onNavigate?: () => void; large?: boolean }) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const favoriteCount = useAppSelector((state) => state.favorites.items.length);
 
   return (
-    <ul className="flex flex-col gap-1">
-      {NAV_ITEMS.map(({ href, labelKey, icon: Icon }) => {
+    <ul className="flex flex-col">
+      {items.map(({ href, labelKey }) => {
         const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
         return (
           <li key={href}>
@@ -26,21 +27,22 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={clsx(
-                "relative flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
-                active ? "text-accent" : "text-muted hover:bg-surface-2 hover:text-text",
+                "relative flex items-center gap-3 pl-4 transition-colors",
+                large ? "min-h-14 font-serif text-3xl" : "min-h-10 text-[0.95rem]",
+                active ? "font-medium text-text" : "text-muted hover:text-text",
               )}
             >
               {active && (
                 <motion.span
-                  layoutId="nav-active"
-                  className="absolute inset-0 rounded-xl bg-accent-soft"
+                  layoutId={large ? "nav-active-mobile" : "nav-active"}
+                  aria-hidden="true"
+                  className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-accent"
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
                 />
               )}
-              <Icon aria-hidden="true" className="relative size-5" />
-              <span className="relative">{t(labelKey)}</span>
+              <span>{t(labelKey)}</span>
               {href === "/favorites" && favoriteCount > 0 && (
-                <span className="relative ml-auto rounded-full bg-accent px-2 text-xs text-accent-contrast">{favoriteCount}</span>
+                <span className="num ml-auto text-xs text-muted">{favoriteCount}</span>
               )}
             </Link>
           </li>
@@ -50,15 +52,15 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-function Brand() {
+function NavSections({ onNavigate, large }: { onNavigate?: () => void; large?: boolean }) {
   const { t } = useTranslation();
   return (
-    <Link href="/" className="flex items-center gap-2 px-3 text-lg font-bold tracking-tight">
-      <span className="flex size-8 items-center justify-center rounded-lg bg-accent text-accent-contrast">
-        <Zap aria-hidden="true" className="size-5" />
-      </span>
-      {t("app.name")}
-    </Link>
+    <nav aria-label={t("nav.mainNav")} className="flex flex-col gap-6">
+      <NavList items={NAV_ITEMS} onNavigate={onNavigate} large={large} />
+      <div className="border-t border-border pt-6">
+        <NavList items={ACCOUNT_NAV_ITEMS} onNavigate={onNavigate} large={large} />
+      </div>
+    </nav>
   );
 }
 
@@ -83,18 +85,19 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col gap-6 border-r border-border bg-surface py-5 lg:flex">
-        <Brand />
-        <nav aria-label={t("nav.mainNav")} className="px-3">
-          <NavLinks />
-        </nav>
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col gap-10 border-r border-border px-6 py-6 lg:flex">
+        <Link href="/" aria-label={t("app.name")} className="self-start">
+          <Logo />
+        </Link>
+        <NavSections />
+        <p className="mt-auto text-xs leading-relaxed text-muted">{t("app.tagline")}</p>
       </aside>
 
       <AnimatePresence>
         {mobileOpen && (
           <div className="fixed inset-0 z-40 lg:hidden">
             <motion.div
-              className="absolute inset-0 bg-black/50"
+              className="absolute inset-0 bg-ink/30"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -106,27 +109,25 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               role="dialog"
               aria-modal="true"
               aria-label={t("nav.mainNav")}
-              className="absolute inset-y-0 left-0 flex w-72 flex-col gap-6 bg-surface py-5 shadow-xl"
+              className="absolute inset-y-0 left-0 flex w-80 max-w-[85vw] flex-col gap-10 border-r border-border bg-bg px-6 py-5"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 400, damping: 40 }}
             >
-              <div className="flex items-center justify-between pr-3">
-                <Brand />
+              <div className="flex items-center justify-between">
+                <Logo />
                 <button
                   ref={closeButtonRef}
                   type="button"
                   onClick={onClose}
                   aria-label={t("nav.closeMenu")}
-                  className="inline-flex size-10 items-center justify-center rounded-lg hover:bg-surface-2"
+                  className="-mr-2 grid size-10 place-items-center rounded-full hover:bg-surface-2"
                 >
-                  <X aria-hidden="true" className="size-5" />
+                  <CloseGlyph className="size-5" />
                 </button>
               </div>
-              <nav aria-label={t("nav.mainNav")} className="px-3">
-                <NavLinks onNavigate={onClose} />
-              </nav>
+              <NavSections onNavigate={onClose} large />
             </motion.div>
           </div>
         )}

@@ -15,7 +15,7 @@ export function TextField({ id, label, help, ...inputProps }: TextFieldProps) {
       <input
         id={id}
         aria-describedby={help ? `${id}-help` : undefined}
-        className="h-11 rounded-xl border border-border bg-surface-2 px-3 text-sm text-text focus:border-accent focus:bg-surface focus:outline-none"
+        className="h-11 rounded-xl border border-border bg-bg px-3.5 text-sm text-text transition-colors focus:border-text focus:outline-none"
         {...inputProps}
       />
       {help && (

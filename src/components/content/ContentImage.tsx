@@ -1,16 +1,10 @@
 "use client";
 
-import { Film, MessageCircle, Newspaper } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
 import type { ContentSource } from "@/types/content";
-
-const PLACEHOLDER: Record<ContentSource, { icon: typeof Film; gradient: string }> = {
-  news: { icon: Newspaper, gradient: "from-sky-500/25 to-indigo-500/25" },
-  movie: { icon: Film, gradient: "from-amber-500/25 to-rose-500/25" },
-  social: { icon: MessageCircle, gradient: "from-fuchsia-500/25 to-violet-500/25" },
-};
 
 interface ContentImageProps {
   src: string | null;
@@ -22,14 +16,14 @@ interface ContentImageProps {
 /**
  * Card artwork. TMDB posters go through Next's optimizer (allow-listed host); news images come
  * from arbitrary publishers, so they are served unoptimized rather than opening the optimizer to every host.
- * Broken or missing images fall back to a gradient with the source icon.
+ * Broken or missing images fall back to a plain paper panel with the source name set in serif.
  */
 export function ContentImage({ src, source, className, sizes }: ContentImageProps) {
+  const { t } = useTranslation();
   const [failed, setFailed] = useState(false);
-  const { icon: Icon, gradient } = PLACEHOLDER[source];
 
   return (
-    <div className={clsx("relative overflow-hidden bg-surface-2", className)}>
+    <div className={clsx("relative overflow-hidden rounded-2xl bg-surface-2", className)}>
       {src && !failed ? (
         <Image
           src={src}
@@ -37,12 +31,12 @@ export function ContentImage({ src, source, className, sizes }: ContentImageProp
           fill
           sizes={sizes}
           unoptimized={!src.startsWith("https://image.tmdb.org/")}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           onError={() => setFailed(true)}
         />
       ) : (
-        <div className={clsx("flex size-full items-center justify-center bg-gradient-to-br", gradient)}>
-          <Icon aria-hidden="true" className="size-8 text-muted" />
+        <div aria-hidden="true" className="flex size-full items-center justify-center">
+          <span className="font-serif text-2xl italic text-muted">{t(`card.source.${source}`)}</span>
         </div>
       )}
     </div>

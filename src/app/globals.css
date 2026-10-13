@@ -6,45 +6,50 @@
 /*
  * Design tokens as CSS custom properties. Components only use the Tailwind
  * aliases (bg-surface, text-muted, ...), so dark mode is a single class swap.
+ * Editorial palette: warm paper, near-black ink, one red accent used sparingly.
  * Text/background pairs meet WCAG AA (4.5:1) in both themes.
  */
 :root {
-  --bg: #f5f6fa;
-  --surface: #ffffff;
-  --surface-2: #eef0f6;
-  --border: #dde1ea;
-  --text: #111827;
-  --muted: #4b5563;
-  --accent: #4338ca;
-  --accent-hover: #3730a3;
-  --accent-contrast: #ffffff;
-  --accent-soft: #e0e7ff;
-  --danger: #b91c1c;
-  --success: #047857;
-  --news: #0369a1;
-  --movie: #b45309;
-  --social: #7e22ce;
-  --ring: #6366f1;
+  --bg: #f4f1ea;
+  --surface: #fbfaf6;
+  --surface-2: #ebe6da;
+  --border: #dcd5c5;
+  --text: #171512;
+  --muted: #5b5649;
+  --ink: #171512;
+  --ink-contrast: #f4f1ea;
+  --accent: #a3341e;
+  --accent-hover: #852a18;
+  --accent-contrast: #fbfaf6;
+  --accent-soft: #f0ddd3;
+  --danger: #9b2c2c;
+  --success: #2f6b45;
+  --news: #2b4c7e;
+  --movie: #85500f;
+  --social: #67397a;
+  --ring: #a3341e;
   color-scheme: light;
 }
 
 .dark {
-  --bg: #0b1020;
-  --surface: #121a2e;
-  --surface-2: #1a2440;
-  --border: #2a3654;
-  --text: #e8ebf3;
-  --muted: #a6b0c5;
-  --accent: #a5b4fc;
-  --accent-hover: #c7d2fe;
-  --accent-contrast: #0b1020;
-  --accent-soft: #232c55;
-  --danger: #fca5a5;
-  --success: #6ee7b7;
-  --news: #7dd3fc;
-  --movie: #fcd34d;
-  --social: #d8b4fe;
-  --ring: #a5b4fc;
+  --bg: #131210;
+  --surface: #1b1a17;
+  --surface-2: #25231f;
+  --border: #36332d;
+  --text: #ece7dc;
+  --muted: #a6a093;
+  --ink: #ece7dc;
+  --ink-contrast: #131210;
+  --accent: #e8866d;
+  --accent-hover: #f0a28e;
+  --accent-contrast: #131210;
+  --accent-soft: #3a241d;
+  --danger: #f19a8a;
+  --success: #8cc79f;
+  --news: #9db8e0;
+  --movie: #e0b066;
+  --social: #c9a3d9;
+  --ring: #e8866d;
   color-scheme: dark;
 }
 
@@ -55,6 +60,8 @@
   --color-border: var(--border);
   --color-text: var(--text);
   --color-muted: var(--muted);
+  --color-ink: var(--ink);
+  --color-ink-contrast: var(--ink-contrast);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-contrast: var(--accent-contrast);
@@ -65,16 +72,23 @@
   --color-movie: var(--movie);
   --color-social: var(--social);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--bg);
   color: var(--text);
+  font-feature-settings: "ss01", "cv11";
   transition:
     background-color 200ms ease,
     color 200ms ease;
+}
+
+/* Tabular figures keep counts and ratings aligned. */
+.num {
+  font-variant-numeric: tabular-nums;
 }
 
 /* One visible focus style for every interactive element. */
@@ -91,11 +105,5 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
   }
 }

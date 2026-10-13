@@ -1,6 +1,5 @@
 "use client";
 
-import { SearchX } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
@@ -47,7 +46,7 @@ export function SearchResults() {
             onClick={() => dispatch(setSearchScope(value))}
             className={clsx(
               "min-h-10 rounded-full border px-4 text-sm font-medium transition-colors",
-              scope === value ? "border-accent bg-accent text-accent-contrast" : "border-border bg-surface text-muted hover:text-text",
+              scope === value ? "border-ink bg-ink text-ink-contrast" : "border-border text-muted hover:border-text hover:text-text",
             )}
           >
             {t(`search.scope.${value}`)}
@@ -63,10 +62,10 @@ export function SearchResults() {
         ) : isError && items.length === 0 ? (
           <ErrorState onRetry={() => void refetch()} />
         ) : items.length === 0 ? (
-          <EmptyState icon={SearchX} title={t("search.emptyTitle")} body={t("search.emptyBody")} />
+          <EmptyState title={t("search.emptyTitle")} body={t("search.emptyBody")} />
         ) : (
           <div className="flex flex-col gap-4">
-            <p className="text-sm text-muted" data-testid="result-count">
+            <p className="num text-sm text-muted" data-testid="result-count">
               {t("search.resultCount", { count: items.length })}
             </p>
             <DemoNotice sources={data?.pages[0]?.sources} />

@@ -107,11 +107,11 @@ describe("SearchResults", () => {
 describe("ContentCard and Favorites", () => {
   it("toggles favorite state with an accessible pressed button", async () => {
     const { store } = renderWithProviders(<ContentCard item={newsItem} />);
-    const button = screen.getByRole("button", { name: "Add “Chip shortage eases” to favorites" });
+    const button = screen.getByRole("button", { name: "Save “Chip shortage eases” to favorites" });
     expect(button).toHaveAttribute("aria-pressed", "false");
     await userEvent.click(button);
     expect(store.getState().favorites.items).toEqual([newsItem]);
-    expect(screen.getByRole("button", { name: "Remove “Chip shortage eases” from favorites" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Saved. Remove “Chip shortage eases” from favorites" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("shows rating for movies and records opening them in history", async () => {

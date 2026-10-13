@@ -1,14 +1,14 @@
 import { clsx } from "clsx";
 import type { AvatarColor } from "@/types/user";
 
-/** Background shades chosen so white initials keep at least 4.5:1 contrast. */
+/** Muted shades from the app palette; white initials keep at least 4.5:1 contrast on each. */
 export const AVATAR_CLASSES: Record<AvatarColor, string> = {
-  indigo: "bg-indigo-600",
-  emerald: "bg-emerald-700",
-  rose: "bg-rose-600",
-  amber: "bg-amber-700",
-  sky: "bg-sky-700",
-  violet: "bg-violet-600",
+  indigo: "bg-[#2b4c7e]",
+  emerald: "bg-[#2f6b45]",
+  rose: "bg-[#a3341e]",
+  amber: "bg-[#85500f]",
+  sky: "bg-[#2d5f6b]",
+  violet: "bg-[#67397a]",
 };
 
 export function initialsOf(name: string): string {
@@ -30,7 +30,7 @@ export function Avatar({ name, color, size = "sm" }: AvatarProps) {
       className={clsx(
         "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white",
         AVATAR_CLASSES[color],
-        size === "sm" ? "size-9 text-sm" : "size-16 text-xl",
+        size === "sm" ? "size-8 text-xs" : "size-16 font-serif text-2xl font-normal",
       )}
     >
       {initialsOf(name)}

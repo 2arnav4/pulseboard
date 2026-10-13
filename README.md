@@ -17,12 +17,12 @@ Built for the PGAGI SDE Intern frontend assignment ("Personalized Content Dashbo
 | News API | [NewsAPI](https://newsapi.org) top headlines per preferred category; full-text search via `/v2/everything`. |
 | Recommendations API | [TMDB](https://www.themoviedb.org): discover by genres mapped from your categories, or "because you liked" recommendations seeded from the last movie you opened or favorited. |
 | Social media API | Mock API (`/api/social`, allowed by the brief) with posts filtered by hashtag/category. |
-| Interactive cards | Image, headline, description, source/category/time, rating or likes, CTA ("Read more", "Play now", "View post"), favorite button. |
+| Interactive cards | Image, headline, description, source/category/time, rating or likes, CTA ("Read more", "Play now", "View post"), Save button. |
 | Infinite scroll / pagination | Feed: infinite scroll (IntersectionObserver + RTK Query infinite query) with a "Load more" fallback. Search: "Load more" pagination. |
 | Dashboard layout | Responsive sidebar (drawer on mobile) + header with search, language, theme toggle and account menu. |
 | Personalized feed | News, recommendations and posts interleaved in one feed. |
 | Trending section | Tabs for trending news, movies (TMDB weekly trending) and posts (most liked). |
-| Favorites section | Heart any card; Favorites page lists them, persisted. |
+| Favorites section | Press Save on any card; the Favorites page lists them, persisted. |
 | Debounced search | Header search commits after a 400 ms pause (Enter commits immediately), across news, movies and posts, filterable by type. |
 | Drag-and-drop | Framer Motion `Reorder` with a drag handle; keyboard move buttons with screen-reader announcements; order persisted. |
 | Dark mode | CSS custom properties + Tailwind `dark` variant; no flash on load (inline script). |
@@ -33,6 +33,10 @@ Built for the PGAGI SDE Intern frontend assignment ("Personalized Content Dashbo
 | **Bonus:** Authentication | NextAuth (Auth.js v5) email/password with bcrypt, Postgres users, signup, protected routes, editable profile. |
 | **Bonus:** Real-time | Server-Sent Events stream new posts; a "N new posts" pill reveals them without moving what you are reading. |
 | **Bonus:** i18n | react-i18next with English, Hindi and Spanish; type-checked translation keys. |
+
+## Design
+
+Editorial look: warm paper and ink palette with a single red accent, Instrument Serif headlines over Geist text, pill-shaped buttons, hairline borders instead of drop shadows, and text-first navigation with no decorative icons. The few functional glyphs (search, menu, close, reorder) are hand-drawn inline SVGs, so there is no icon library dependency. All colors are CSS custom properties, so dark mode is one class swap.
 
 ## Tech stack
 
@@ -131,7 +135,7 @@ Key decisions:
 ## User flow
 
 1. Sign up (or use the demo account). New users land on **Settings** to pick their categories.
-2. **My Feed** shows news, movie picks and posts for those categories. Scroll to load more, drag cards (or use the arrow buttons) to reorder, and heart anything to save it.
+2. **My Feed** shows news, movie picks and posts for those categories. Scroll to load more, drag cards (or use the arrow buttons) to reorder, and press Save on anything you want to keep.
 3. New posts stream in live. Click "N new posts" to show them.
 4. **Search** from the header (press `/` to focus). Results update as you type, and you can filter by type.
 5. **Trending** shows top news, movies and posts.

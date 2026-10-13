@@ -1,6 +1,5 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
@@ -81,11 +80,11 @@ export function ProfileForm() {
   return (
     <div>
       <PageHeader title={t("profile.title")} subtitle={t("profile.subtitle")} />
-      <form onSubmit={onSubmit} noValidate className="grid max-w-2xl gap-6 rounded-2xl border border-border bg-surface p-5 sm:p-6">
+      <form onSubmit={onSubmit} noValidate className="grid max-w-2xl gap-6 rounded-3xl border border-border bg-surface p-6 sm:p-8">
         <div className="flex items-center gap-4">
           <Avatar name={form.name || load.profile.email} color={form.avatarColor} size="lg" />
           <div>
-            <p className="font-semibold">{form.name}</p>
+            <p className="font-serif text-2xl leading-tight">{form.name}</p>
             <p className="text-sm text-muted">{t("profile.memberSince", { date: memberSince })}</p>
           </div>
         </div>
@@ -99,13 +98,13 @@ export function ProfileForm() {
             maxLength={50}
             value={form.name}
             onChange={(event) => setForm({ ...form, name: event.target.value })}
-            className="h-11 rounded-xl border border-border bg-surface-2 px-3 text-sm focus:border-accent focus:outline-none"
+            className="h-11 rounded-xl border border-border bg-bg px-3.5 text-sm transition-colors focus:border-text focus:outline-none"
           />
         </div>
 
         <div className="grid gap-2">
           <label htmlFor="profile-email" className="text-sm font-medium">{t("profile.email")}</label>
-          <input id="profile-email" value={load.profile.email} readOnly className="h-11 rounded-xl border border-border bg-surface-2 px-3 text-sm text-muted" />
+          <input id="profile-email" value={load.profile.email} readOnly className="h-11 rounded-xl border border-border bg-surface-2 px-3.5 text-sm text-muted" />
         </div>
 
         <div className="grid gap-2">
@@ -117,7 +116,7 @@ export function ProfileForm() {
             aria-describedby="profile-bio-help"
             value={form.bio}
             onChange={(event) => setForm({ ...form, bio: event.target.value })}
-            className="rounded-xl border border-border bg-surface-2 p-3 text-sm focus:border-accent focus:outline-none"
+            className="rounded-xl border border-border bg-bg p-3.5 text-sm transition-colors focus:border-text focus:outline-none"
           />
           <p id="profile-bio-help" className="text-xs text-muted">
             {t("profile.bioHelp")} ({form.bio.length}/{BIO_MAX})
@@ -141,12 +140,10 @@ export function ProfileForm() {
                 <span
                   aria-hidden="true"
                   className={clsx(
-                    "flex size-10 items-center justify-center rounded-full text-white ring-offset-2 ring-offset-surface peer-checked:ring-2 peer-checked:ring-text peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-ring",
+                    "block size-9 rounded-full ring-offset-[3px] ring-offset-surface peer-checked:ring-[1.5px] peer-checked:ring-text peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-ring",
                     AVATAR_CLASSES[color],
                   )}
-                >
-                  {form.avatarColor === color && <Check className="size-5" />}
-                </span>
+                />
               </label>
             ))}
           </div>

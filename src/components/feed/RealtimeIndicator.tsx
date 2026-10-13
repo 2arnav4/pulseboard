@@ -8,11 +8,8 @@ export function RealtimeIndicator({ status }: { status: RealtimeStatus }) {
   const { t } = useTranslation();
   const live = status === "live";
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted">
-      <span className="relative flex size-2.5" aria-hidden="true">
-        {live && <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />}
-        <span className={clsx("relative inline-flex size-2.5 rounded-full", live ? "bg-success" : "bg-muted")} />
-      </span>
+    <span className="inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-xs text-muted ring-1 ring-inset ring-border">
+      <span aria-hidden="true" className={clsx("size-1.5 rounded-full", live ? "animate-pulse bg-success" : "bg-muted")} />
       {status === "off" ? t("feed.paused") : t("feed.live")}
     </span>
   );

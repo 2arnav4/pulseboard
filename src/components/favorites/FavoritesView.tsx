@@ -1,10 +1,9 @@
 "use client";
 
-import { Heart, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { ContentGrid } from "@/components/content/ContentGrid";
-import { Button } from "@/components/ui/Button";
+import { BUTTON_BASE, BUTTON_VARIANTS, Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Spinner } from "@/components/ui/Spinner";
@@ -25,7 +24,6 @@ export function FavoritesView() {
         actions={
           favorites.length > 0 && (
             <Button variant="danger" onClick={() => dispatch(clearFavorites())}>
-              <Trash2 aria-hidden="true" className="size-4" />
               {t("favorites.clear")}
             </Button>
           )
@@ -35,11 +33,10 @@ export function FavoritesView() {
         <Spinner label={t("state.loading")} />
       ) : favorites.length === 0 ? (
         <EmptyState
-          icon={Heart}
           title={t("favorites.emptyTitle")}
           body={t("favorites.emptyBody")}
           action={
-            <Link href="/" className="inline-flex min-h-10 items-center rounded-xl bg-accent px-4 text-sm font-medium text-accent-contrast hover:bg-accent-hover">
+            <Link href="/" className={`${BUTTON_BASE} ${BUTTON_VARIANTS.primary}`}>
               {t("favorites.browse")}
             </Link>
           }

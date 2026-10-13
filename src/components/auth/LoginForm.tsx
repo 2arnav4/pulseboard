@@ -50,7 +50,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
       footer={
         <>
           {t("auth.noAccount")}{" "}
-          <Link href="/signup" className="font-medium text-accent underline-offset-4 hover:underline">
+          <Link href="/signup" className="font-medium text-text underline decoration-border underline-offset-4 hover:decoration-text">
             {t("auth.signup")}
           </Link>
         </>
@@ -74,7 +74,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           {pending ? t("auth.loggingIn") : t("auth.login")}
         </Button>
       </form>
-      <div className="my-5 flex items-center gap-3 text-xs uppercase text-muted">
+      <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.14em] text-muted">
         <span className="h-px flex-1 bg-border" />
         {t("auth.or")}
         <span className="h-px flex-1 bg-border" />
