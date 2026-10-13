@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
-import { Avatar, AVATAR_CLASSES } from "@/components/layout/Avatar";
+import { Avatar } from "@/components/layout/Avatar";
 import { Button } from "@/components/ui/Button";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -84,7 +84,7 @@ export function ProfileForm() {
         <div className="flex items-center gap-4">
           <Avatar name={form.name || load.profile.email} color={form.avatarColor} size="lg" />
           <div>
-            <p className="font-serif text-2xl leading-tight">{form.name}</p>
+            <p className="font-display font-semibold tracking-tight text-2xl leading-tight">{form.name}</p>
             <p className="text-sm text-muted">{t("profile.memberSince", { date: memberSince })}</p>
           </div>
         </div>
@@ -137,13 +137,9 @@ export function ProfileForm() {
                   className="peer sr-only"
                 />
                 <span className="sr-only">{color}</span>
-                <span
-                  aria-hidden="true"
-                  className={clsx(
-                    "block size-9 rounded-full ring-offset-[3px] ring-offset-surface peer-checked:ring-[1.5px] peer-checked:ring-text peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-ring",
-                    AVATAR_CLASSES[color],
-                  )}
-                />
+                <span className="block rounded-full ring-offset-[3px] ring-offset-surface transition-transform hover:scale-105 peer-checked:ring-2 peer-checked:ring-text peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-ring">
+                  <Avatar name={form.name || load.profile.email} color={color} size="md" />
+                </span>
               </label>
             ))}
           </div>

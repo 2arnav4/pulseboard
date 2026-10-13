@@ -14,11 +14,15 @@
     "test:all": "npm run lint && npm run typecheck && npm run test && npm run test:e2e"
   },
   "dependencies": {
+    "@dicebear/core": "^9.4.3",
+    "@dicebear/fun-emoji": "^9.4.2",
     "@neondatabase/serverless": "^1.2.0",
     "@reduxjs/toolkit": "^2.13.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
+    "emojibase-data": "^17.0.0",
     "framer-motion": "^14.1.0",
+    "frimousse": "^0.4.0",
     "i18next": "^26.4.4",
     "next": "16.4.0",
     "next-auth": "^5.0.0-beta.32",

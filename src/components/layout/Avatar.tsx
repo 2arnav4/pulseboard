@@ -1,39 +1,49 @@
+"use client";
+
+import { createAvatar } from "@dicebear/core";
+import * as funEmoji from "@dicebear/fun-emoji";
 import { clsx } from "clsx";
+import { useMemo } from "react";
 import type { AvatarColor } from "@/types/user";
 
-/** Muted shades from the app palette; white initials keep at least 4.5:1 contrast on each. */
-export const AVATAR_CLASSES: Record<AvatarColor, string> = {
-  indigo: "bg-[#2b4c7e]",
-  emerald: "bg-[#2f6b45]",
-  rose: "bg-[#a3341e]",
-  amber: "bg-[#85500f]",
-  sky: "bg-[#2d5f6b]",
-  violet: "bg-[#67397a]",
+/** Background behind the face. Light tints so the dark face strokes stay readable. */
+export const AVATAR_HEX: Record<AvatarColor, string> = {
+  indigo: "8b9cf7",
+  emerald: "71cf62",
+  rose: "f79292",
+  amber: "fcbc34",
+  sky: "5bc0f8",
+  violet: "d08bf0",
 };
 
-export function initialsOf(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  const letters = parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : (parts[0] ?? "?").slice(0, 2);
-  return letters.toUpperCase();
+// Only cheerful expressions: the style's full set includes sick, sad and crying faces.
+const HAPPY_EYES: funEmoji.Options["eyes"] = ["cute", "wink", "wink2", "plain", "glasses", "closed", "love", "stars", "shades", "closed2"];
+const HAPPY_MOUTHS: funEmoji.Options["mouth"] = ["lilSmile", "cute", "wideSmile", "smileTeeth", "smileLol", "tongueOut", "kissHeart", "shy"];
+
+/**
+ * Emoji face generated locally from the seed (no network request), so the same name always
+ * gets the same face and the SVG never leaves the browser.
+ */
+export function avatarDataUri(seed: string, color: AvatarColor): string {
+  return createAvatar(funEmoji, {
+    seed,
+    backgroundColor: [AVATAR_HEX[color]],
+    eyes: HAPPY_EYES,
+    mouth: HAPPY_MOUTHS,
+    radius: 50,
+  }).toDataUri();
 }
 
 interface AvatarProps {
   name: string;
   color: AvatarColor;
-  size?: "sm" | "lg";
+  size?: "sm" | "md" | "lg";
 }
 
+const SIZES = { sm: "size-8", md: "size-10", lg: "size-16" } as const;
+
 export function Avatar({ name, color, size = "sm" }: AvatarProps) {
-  return (
-    <span
-      aria-hidden="true"
-      className={clsx(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white",
-        AVATAR_CLASSES[color],
-        size === "sm" ? "size-8 text-xs" : "size-16 font-serif text-2xl font-normal",
-      )}
-    >
-      {initialsOf(name)}
-    </span>
-  );
+  const src = useMemo(() => avatarDataUri(name.trim() || "?", color), [name, color]);
+  // eslint-disable-next-line @next/next/no-img-element -- inline SVG data URI; the image optimizer adds nothing here
+  return <img src={src} alt="" aria-hidden="true" className={clsx("shrink-0 rounded-full", SIZES[size])} />;
 }

@@ -6,22 +6,22 @@
 /*
  * Design tokens as CSS custom properties. Components only use the Tailwind
  * aliases (bg-surface, text-muted, ...), so dark mode is a single class swap.
- * Editorial palette: warm paper, near-black ink, one red accent used sparingly.
+ * Palette: near-white warm paper, near-black ink, one red accent used sparingly.
  * Text/background pairs meet WCAG AA (4.5:1) in both themes.
  */
 :root {
-  --bg: #f4f1ea;
-  --surface: #fbfaf6;
-  --surface-2: #ebe6da;
-  --border: #dcd5c5;
+  --bg: #fdfcfa;
+  --surface: #ffffff;
+  --surface-2: #f4f2ed;
+  --border: #e8e4db;
   --text: #171512;
-  --muted: #5b5649;
+  --muted: #5e5a51;
   --ink: #171512;
-  --ink-contrast: #f4f1ea;
+  --ink-contrast: #fdfcfa;
   --accent: #a3341e;
   --accent-hover: #852a18;
-  --accent-contrast: #fbfaf6;
-  --accent-soft: #f0ddd3;
+  --accent-contrast: #ffffff;
+  --accent-soft: #fbe9e3;
   --danger: #9b2c2c;
   --success: #2f6b45;
   --news: #2b4c7e;
@@ -72,15 +72,14 @@
   --color-movie: var(--movie);
   --color-social: var(--social);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-feature-settings: "ss01", "cv11";
   transition:
     background-color 200ms ease,
     color 200ms ease;

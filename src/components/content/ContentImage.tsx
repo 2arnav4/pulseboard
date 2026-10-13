@@ -36,7 +36,7 @@ export function ContentImage({ src, source, className, sizes }: ContentImageProp
         />
       ) : (
         <div aria-hidden="true" className="flex size-full items-center justify-center">
-          <span className="font-serif text-2xl italic text-muted">{t(`card.source.${source}`)}</span>
+          <span className="font-display text-xl font-semibold text-muted">{t(`card.source.${source}`)}</span>
         </div>
       )}
     </div>

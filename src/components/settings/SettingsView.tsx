@@ -16,7 +16,7 @@ import { Switch } from "./Switch";
 function Panel({ title, children, id }: { title: string; children: ReactNode; id: string }) {
   return (
     <section aria-labelledby={id} className="grid gap-4 border-b border-border pb-8 md:grid-cols-[14rem_1fr] md:gap-10">
-      <h2 id={id} className="font-serif text-2xl">
+      <h2 id={id} className="font-display font-semibold tracking-tight text-2xl">
         {title}
       </h2>
       <div>{children}</div>

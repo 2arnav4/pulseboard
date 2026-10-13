@@ -73,7 +73,7 @@ export function ContentCard({ item, layout = "grid", reorderControls }: ContentC
           {isMock && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[11px]">{t("card.demo")}</span>}
         </div>
 
-        <h3 id={`title-${item.id}`} className={clsx("line-clamp-2 font-serif leading-[1.15]", isRow ? "text-2xl" : "text-[1.4rem]")}>
+        <h3 id={`title-${item.id}`} className={clsx("line-clamp-2 font-display font-semibold leading-snug tracking-tight", isRow ? "text-xl" : "text-lg")}>
           {item.title}
         </h3>
         {item.description && <p className="line-clamp-2 text-sm leading-relaxed text-muted">{item.description}</p>}

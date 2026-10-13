@@ -28,7 +28,7 @@ function NavList({ items, onNavigate, large }: { items: readonly NavItem[]; onNa
               aria-current={active ? "page" : undefined}
               className={clsx(
                 "relative flex items-center gap-3 pl-4 transition-colors",
-                large ? "min-h-14 font-serif text-3xl" : "min-h-10 text-[0.95rem]",
+                large ? "min-h-14 font-display font-semibold tracking-tight text-3xl" : "min-h-10 text-[0.95rem]",
                 active ? "font-medium text-text" : "text-muted hover:text-text",
               )}
             >
