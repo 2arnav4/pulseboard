@@ -4,7 +4,7 @@ A personalized content dashboard: news, movie recommendations and social posts i
 
 Built for the PGAGI SDE Intern frontend assignment ("Personalized Content Dashboard").
 
-- **Live demo:** _LIVE_URL_
+- **Live demo:** https://pulseboard-ten-amber.vercel.app
 - **Demo login:** `demo@pulseboard.app` / `pulseboard-demo` (or use "Continue with the demo account" on the login page, or create your own account)
 
 ---
