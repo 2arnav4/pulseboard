@@ -6,6 +6,7 @@ import feedReducer from "@/features/feed/feedSlice";
 import historyReducer from "@/features/history/historySlice";
 import preferencesReducer from "@/features/preferences/preferencesSlice";
 import searchReducer from "@/features/search/searchSlice";
+import socialReducer from "@/features/social/socialSlice";
 import type { PersistedState } from "@/lib/persistence";
 
 export const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
   feed: feedReducer,
   search: searchReducer,
   history: historyReducer,
+  social: socialReducer,
   [contentApi.reducerPath]: contentApi.reducer,
 });
 
@@ -39,5 +41,6 @@ export function selectPersistedState(state: RootState): PersistedState {
     favorites: state.favorites,
     history: state.history,
     feedOrder: state.feed.order,
+    social: state.social,
   };
 }

@@ -3,6 +3,8 @@ import { CATEGORIES, CONTENT_SOURCES, type ContentItem } from "@/types/content";
 import { LANGUAGES, type PreferencesState } from "@/features/preferences/preferencesSlice";
 import type { FavoritesState } from "@/features/favorites/favoritesSlice";
 import type { HistoryState } from "@/features/history/historySlice";
+import type { SocialState } from "@/features/social/socialSlice";
+import { MAX_POSTS, MAX_REACTIONS_PER_ITEM } from "@/lib/social";
 
 /** Bump when the stored shape changes; older blobs are then ignored instead of crashing the app. */
 const STORAGE_VERSION = 1;
@@ -13,6 +15,7 @@ export interface PersistedState {
   favorites?: FavoritesState;
   history?: HistoryState;
   feedOrder?: string[];
+  social?: SocialState;
 }
 
 const contentItemSchema: z.ZodType<ContentItem> = z.object({
@@ -43,6 +46,13 @@ const persistedSchema = z.object({
   favorites: z.object({ items: z.array(contentItemSchema) }).optional(),
   history: z.object({ movieIds: z.array(z.number()) }).optional(),
   feedOrder: z.array(z.string()).optional(),
+  // Added after v1 shipped; optional, so blobs saved before it still load.
+  social: z
+    .object({
+      reactions: z.record(z.string(), z.array(z.string().max(32)).max(MAX_REACTIONS_PER_ITEM)),
+      posts: z.array(contentItemSchema).max(MAX_POSTS),
+    })
+    .optional(),
 });
 
 /** One storage key per signed-in user, so two people sharing a browser keep separate dashboards. */
