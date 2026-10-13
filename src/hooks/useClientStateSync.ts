@@ -7,12 +7,10 @@ import { hydrateFromStorage } from "@/store/actions";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/store/hooks";
 import { selectPersistedState } from "@/store/store";
 
-const SAVE_DELAY_MS = 250;
-
 /**
  * Bridges Redux and the browser for the signed-in user:
  * 1. loads their saved state from localStorage once (per-user key),
- * 2. saves relevant slices back whenever they change (debounced),
+ * 2. saves relevant slices back whenever they change,
  * 3. applies theme and language to <html> and i18next.
  */
 export function useClientStateSync(userId: string) {
@@ -27,22 +25,17 @@ export function useClientStateSync(userId: string) {
     const key = storageKeyFor(userId);
     dispatch(hydrateFromStorage(loadPersistedState(window.localStorage, key) ?? {}));
 
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let lastSaved = "";
-    const unsubscribe = store.subscribe(() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        const snapshot = selectPersistedState(store.getState());
-        const serialized = JSON.stringify(snapshot);
-        if (serialized === lastSaved) return; // Most actions (API cache updates) do not touch persisted slices.
-        lastSaved = serialized;
-        savePersistedState(window.localStorage, key, snapshot);
-      }, SAVE_DELAY_MS);
+    // Save synchronously (a debounce would lose a change made just before a reload or tab close),
+    // but only when a persisted slice changed: Redux keeps references stable for untouched slices,
+    // so RTK Query cache updates cost one cheap comparison and no localStorage write.
+    let previous = selectPersistedState(store.getState());
+    return store.subscribe(() => {
+      const next = selectPersistedState(store.getState());
+      const changed = (Object.keys(next) as (keyof typeof next)[]).some((field) => next[field] !== previous[field]);
+      if (!changed) return;
+      previous = next;
+      savePersistedState(window.localStorage, key, next);
     });
-    return () => {
-      clearTimeout(timer);
-      unsubscribe();
-    };
   }, [dispatch, store, userId]);
 
   useEffect(() => {
