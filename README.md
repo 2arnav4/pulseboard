@@ -17,7 +17,7 @@ Built for the PGAGI SDE Intern frontend assignment ("Personalized Content Dashbo
 | News API | [NewsAPI](https://newsapi.org) top headlines per preferred category; full-text search via `/v2/everything`. |
 | Recommendations API | [TMDB](https://www.themoviedb.org): discover by genres mapped from your categories, or "because you liked" recommendations seeded from the last movie you opened or favorited. |
 | Social media API | Mock API (`/api/social`, allowed by the brief) with posts filtered by hashtag/category. |
-| Interactive cards | Image, headline, description, source/category/time, rating or likes, CTA ("Read more", "Play now", "View post"), Save button. |
+| Interactive cards | Image, headline, description, source/category/time, rating, CTA ("Read more", "Play now", "View post"), Save button, emoji reactions, share. |
 | Infinite scroll / pagination | Feed: infinite scroll (IntersectionObserver + RTK Query infinite query) with a "Load more" fallback. Search: "Load more" pagination. |
 | Dashboard layout | Responsive sidebar (drawer on mobile) + header with search, language, theme toggle and account menu. |
 | Personalized feed | News, recommendations and posts interleaved in one feed. |
@@ -32,11 +32,14 @@ Built for the PGAGI SDE Intern frontend assignment ("Personalized Content Dashbo
 | Testing | Unit + integration (Vitest, React Testing Library, MSW) and E2E (Playwright). |
 | **Bonus:** Authentication | NextAuth (Auth.js v5) email/password with bcrypt, Postgres users, signup, protected routes, editable profile. |
 | **Bonus:** Real-time | Server-Sent Events stream new posts; a "N new posts" pill reveals them without moving what you are reading. |
+| **Extra:** Social features | Emoji reactions (quick row plus a searchable picker), a post composer with emoji and topics, clickable hashtags that run a search, native share sheet with clipboard fallback, and generated emoji avatars. |
 | **Bonus:** i18n | react-i18next with English, Hindi and Spanish; type-checked translation keys. |
 
 ## Design
 
-Editorial look: warm paper and ink palette with a single red accent, Instrument Serif headlines over Geist text, pill-shaped buttons, hairline borders instead of drop shadows, and text-first navigation with no decorative icons. The few functional glyphs (search, menu, close, reorder) are hand-drawn inline SVGs, so there is no icon library dependency. All colors are CSS custom properties, so dark mode is one class swap.
+Editorial look: warm near-white paper and ink palette with a single red accent, Bricolage Grotesque headlines over Inter body text, pill-shaped buttons, hairline borders instead of drop shadows, and text-first navigation with no decorative icons. The few functional glyphs (search, menu, close, reorder) are hand-drawn inline SVGs, so there is no icon library dependency. All colors are CSS custom properties, so dark mode is one class swap.
+
+Avatars are fun-emoji faces from [DiceBear](https://www.dicebear.com), generated in the browser from the user's name (limited to happy expressions). The emoji picker is [frimousse](https://frimousse.liveblocks.io); its Emojibase data is served by our own `/api/emojibase` route instead of a public CDN, so the browser makes no third-party request.
 
 ## Tech stack
 
@@ -90,9 +93,9 @@ src/
     (auth)/login, signup          # public pages
     (dashboard)/                  # protected pages: feed, trending, favorites, search, settings, profile
     api/                          # route handlers (server only)
-      feed, search, trending, social, realtime (SSE), register, profile, auth/[...nextauth]
+      feed, search, trending, social, realtime (SSE), register, profile, emojibase, auth/[...nextauth]
   auth.ts, auth.config.ts, proxy.ts   # NextAuth setup and route protection
-  components/                     # UI by feature: content, feed, layout, search, settings, profile, auth, ui
+  components/                     # UI by feature: content, feed, layout, search, settings, profile, auth, social, ui
   features/                       # Redux slices + RTK Query API (contentApi)
   hooks/                          # debounce, infinite scroll, SSE, persistence sync
   i18n/                           # i18next setup + en/hi/es translations
@@ -135,7 +138,7 @@ Key decisions:
 ## User flow
 
 1. Sign up (or use the demo account). New users land on **Settings** to pick their categories.
-2. **My Feed** shows news, movie picks and posts for those categories. Scroll to load more, drag cards (or use the arrow buttons) to reorder, and press Save on anything you want to keep.
+2. **My Feed** shows news, movie picks and posts for those categories. Write your own post at the top (emoji and #hashtags supported); react to any card with emoji, share it, or click a hashtag to search it. Scroll to load more, drag cards (or use the arrow buttons) to reorder, and press Save on anything you want to keep.
 3. New posts stream in live. Click "N new posts" to show them.
 4. **Search** from the header (press `/` to focus). Results update as you type, and you can filter by type.
 5. **Trending** shows top news, movies and posts.
@@ -144,9 +147,9 @@ Key decisions:
 
 ## Testing
 
-- **Unit:** reducers, persistence (corrupt or old data, storage quota errors), feed helpers, API adapters (normalization, live and fallback paths, TMDB auth modes), request validation.
-- **Integration (RTL + MSW):** feed loaded, empty, error and retry states, demo notice, pagination, keyboard reorder, the feed waiting for hydration, search debounce, search empty and error states, favorites.
-- **E2E (Playwright):** sign up, sign in and out, protected redirects, wrong password, duplicate email, 401 on anonymous API calls, profile update, debounced search (asserts exactly one request), type filter, drag-and-drop with persistence across reload, keyboard reorder, dark mode and language persistence, categories, favorites, real-time SSE, trending tabs, mobile drawer.
+- **Unit:** reducers (including reactions and posts), hashtag extraction, persistence (corrupt or old data, storage quota errors), feed helpers, API adapters (normalization, live and fallback paths, TMDB auth modes), request validation.
+- **Integration (RTL + MSW):** feed loaded, empty, error and retry states, demo notice, pagination, keyboard reorder, the feed waiting for hydration, search debounce, search empty and error states, favorites, reactions, the post composer (including Ctrl+Enter), deleting your own post, hashtag search.
+- **E2E (Playwright):** sign up, sign in and out, protected redirects, wrong password, duplicate email, 401 on anonymous API calls, profile update, debounced search (asserts exactly one request), type filter, drag-and-drop with persistence across reload, keyboard reorder, dark mode and language persistence, categories, favorites, real-time SSE, trending tabs, mobile drawer, posting with the emoji picker, reactions persisting across reload, the emoji data route (401 signed out, 404 for unknown locales, ETag).
 
 GitHub Actions runs lint, type check, unit and integration tests, and E2E on every push.
 
@@ -166,5 +169,6 @@ Deployed on Vercel.
 - **Category → movie genre** mapping is approximate (TMDB has genres, not news categories).
 - **Real-time stream** reconnects about every 55 seconds because of serverless function time limits. EventSource reconnects automatically.
 - **The demo account is shared**, so anyone can edit its profile.
+- Your posts and reactions are stored only in your browser (per user), so other users don't see them. A real backend would store them in Postgres.
 - Preferences and favorites are stored in the browser, per user, not in the database, so they don't sync across devices.
 - Sign-up has no rate limiting or email verification.

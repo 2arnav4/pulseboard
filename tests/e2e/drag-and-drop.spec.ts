@@ -10,6 +10,11 @@ test.describe("drag-and-drop reordering", () => {
 
   test("dragging a card by its handle reorders the feed and the order survives a reload", async ({ page }) => {
     const before = await feedItemIds(page);
+    // Bring the list to the top of the viewport (under the sticky header) so the drop target
+    // three cards down is on screen; the composer above the feed pushes it out of view otherwise.
+    await page.getByTestId("feed-item").first().evaluate((node) => {
+      window.scrollBy(0, node.getBoundingClientRect().top - 80);
+    });
     const firstHandle = page.getByTestId("drag-handle").first();
     const thirdItem = page.getByTestId("feed-item").nth(2);
 
