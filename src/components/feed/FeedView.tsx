@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
 import { ContentCard } from "@/components/content/ContentCard";
 import { BUTTON_BASE, BUTTON_VARIANTS, Button } from "@/components/ui/Button";
+import { PostComposer } from "@/components/social/PostComposer";
 import { DemoNotice } from "@/components/ui/DemoNotice";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorState } from "@/components/ui/ErrorState";
@@ -41,6 +42,7 @@ export function FeedView() {
   const categories = useAppSelector((state) => state.preferences.categories);
   const order = useAppSelector((state) => state.feed.order);
   const liveItems = useAppSelector((state) => state.feed.liveItems);
+  const posts = useAppSelector((state) => state.social.posts);
   const seedMovieId = useAppSelector((state) => state.feed.seedMovieId);
   const realtimeStatus = useRealtimeFeed();
 
@@ -51,6 +53,11 @@ export function FeedView() {
   const items = useMemo(() => uniqueById(data?.pages.flatMap((page) => page.items) ?? []), [data]);
   const orderedItems = useMemo(() => applyCustomOrder(items, order), [items, order]);
   const sources = useMemo(() => mergeSources(data?.pages), [data]);
+  // Your own posts and revealed live posts share the "Just in" strip, newest first.
+  const justIn = useMemo(
+    () => [...posts, ...liveItems].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)),
+    [posts, liveItems],
+  );
   const canLoadMore = hasNextPage && !isFetchingNextPage && !isFetchNextPageError;
   const sentinelRef = useInfiniteScroll<HTMLDivElement>(() => void fetchNextPage(), canLoadMore);
 
@@ -96,10 +103,11 @@ export function FeedView() {
     );
   }
 
-  if (items.length === 0 && liveItems.length === 0) {
+  if (items.length === 0 && justIn.length === 0) {
     return (
-      <section>
+      <section className="flex flex-col gap-4">
         {header}
+        <PostComposer />
         <EmptyState
           title={t("state.emptyTitle")}
           body={t("state.emptyBody")}
@@ -116,14 +124,15 @@ export function FeedView() {
   return (
     <section className="flex flex-col gap-4">
       {header}
+      <PostComposer />
       <DemoNotice sources={sources} />
       <NewPostsPill />
 
-      {liveItems.length > 0 && (
+      {justIn.length > 0 && (
         <div>
           <h2 className="mb-3 text-[11px] font-medium uppercase tracking-[0.14em] text-accent">{t("feed.liveSection")}</h2>
           <ul aria-label={t("feed.liveSection")} className="flex flex-col gap-4">
-            {liveItems.map((item) => (
+            {justIn.map((item) => (
               <li key={item.id}>
                 <ContentCard item={item} layout="row" />
               </li>

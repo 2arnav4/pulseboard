@@ -6,7 +6,12 @@ import { useTranslation } from "react-i18next";
 import { clsx } from "clsx";
 import { toggleFavorite } from "@/features/favorites/favoritesSlice";
 import { itemOpened } from "@/features/history/historySlice";
-import { formatCompactNumber, formatRelativeTime } from "@/lib/format";
+import { formatRelativeTime } from "@/lib/format";
+import { isOwnPost } from "@/lib/social";
+import { postDeleted } from "@/features/social/socialSlice";
+import { HashtagList } from "@/components/social/HashtagList";
+import { ReactionBar } from "@/components/social/ReactionBar";
+import { ShareButton } from "@/components/social/ShareButton";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import type { ContentItem, ContentSource } from "@/types/content";
 import { ContentImage } from "./ContentImage";
@@ -31,6 +36,7 @@ export function ContentCard({ item, layout = "grid", reorderControls }: ContentC
   const dispatch = useAppDispatch();
   const isFavorite = useAppSelector((state) => state.favorites.items.some((favorite) => favorite.id === item.id));
   const isMock = item.id.includes("-mock-");
+  const ownPost = isOwnPost(item);
   const isRow = layout === "row";
   const meta = item.source === "movie" ? item.author : formatRelativeTime(item.publishedAt, i18n.language);
   // Social posts have no artwork; an empty placeholder would only add noise, so they render text-only.
@@ -64,6 +70,12 @@ export function ContentCard({ item, layout = "grid", reorderControls }: ContentC
           </span>
           <span aria-hidden="true">·</span>
           <span>{t(`categories.${item.category}`)}</span>
+          {ownPost && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="font-medium text-text">{t("social.you")}</span>
+            </>
+          )}
           {meta && (
             <>
               <span aria-hidden="true">·</span>
@@ -78,46 +90,60 @@ export function ContentCard({ item, layout = "grid", reorderControls }: ContentC
         </h3>
         {item.description && <p className="line-clamp-2 text-sm leading-relaxed text-muted">{item.description}</p>}
 
-        <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-3">
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => dispatch(itemOpened(item))}
-            className="group/cta inline-flex min-h-9 items-center gap-1 text-sm font-medium text-text underline decoration-border underline-offset-4 transition-colors hover:decoration-text"
-          >
-            {t(CTA_KEY[item.source])}
-            <span aria-hidden="true" className="inline-block transition-transform group-hover/cta:translate-x-0.5">
-              →
-            </span>
-            <span className="sr-only"> {t("card.opensInNewTab")}</span>
-          </a>
+        {item.hashtags && (ownPost || item.source === "social") && <HashtagList tags={item.hashtags} />}
 
-          {item.rating !== undefined && (
-            <span className="num text-sm text-muted" aria-label={t("card.rating", { value: item.rating })}>
-              {item.rating}
-              <span className="text-xs"> / 10</span>
-            </span>
-          )}
-          {item.likes !== undefined && (
-            <span className="num text-sm text-muted">{t("card.likes", { count: item.likes, formatted: formatCompactNumber(item.likes, i18n.language) })}</span>
-          )}
+        <div className="mt-auto flex flex-col gap-3 pt-3">
+          <ReactionBar item={item} />
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {ownPost ? (
+              <button
+                type="button"
+                onClick={() => dispatch(postDeleted(item.id))}
+                aria-label={t("social.deleteLabel", { title: item.title })}
+                className="inline-flex min-h-9 items-center text-sm font-medium text-danger underline decoration-danger/30 underline-offset-4 hover:decoration-danger"
+              >
+                {t("social.delete")}
+              </button>
+            ) : (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => dispatch(itemOpened(item))}
+                className="group/cta inline-flex min-h-9 items-center gap-1 text-sm font-medium text-text underline decoration-border underline-offset-4 transition-colors hover:decoration-text"
+              >
+                {t(CTA_KEY[item.source])}
+                <span aria-hidden="true" className="inline-block transition-transform group-hover/cta:translate-x-0.5">
+                  →
+                </span>
+                <span className="sr-only"> {t("card.opensInNewTab")}</span>
+              </a>
+            )}
 
-          <div className="ml-auto flex items-center gap-1">
-            {reorderControls}
-            <motion.button
-              type="button"
-              whileTap={{ scale: 0.94 }}
-              onClick={() => dispatch(toggleFavorite(item))}
-              aria-pressed={isFavorite}
-              aria-label={t(isFavorite ? "card.unfavorite" : "card.favorite", { title: item.title })}
-              className={clsx(
-                "ml-1 inline-flex min-h-9 items-center rounded-full px-4 text-sm font-medium transition-colors",
-                isFavorite ? "bg-ink text-ink-contrast hover:bg-accent hover:text-accent-contrast" : "text-text ring-1 ring-inset ring-border hover:ring-text",
-              )}
-            >
-              {t(isFavorite ? "card.saved" : "card.save")}
-            </motion.button>
+            {item.rating !== undefined && (
+              <span className="num text-sm text-muted" aria-label={t("card.rating", { value: item.rating })}>
+                {item.rating}
+                <span className="text-xs"> / 10</span>
+              </span>
+            )}
+
+            <div className="ml-auto flex items-center gap-1">
+              {reorderControls}
+              {!ownPost && <ShareButton item={item} />}
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.94 }}
+                onClick={() => dispatch(toggleFavorite(item))}
+                aria-pressed={isFavorite}
+                aria-label={t(isFavorite ? "card.unfavorite" : "card.favorite", { title: item.title })}
+                className={clsx(
+                  "ml-1 inline-flex min-h-9 items-center rounded-full px-4 text-sm font-medium transition-colors",
+                  isFavorite ? "bg-ink text-ink-contrast hover:bg-accent hover:text-accent-contrast" : "text-text ring-1 ring-inset ring-border hover:ring-text",
+                )}
+              >
+                {t(isFavorite ? "card.saved" : "card.save")}
+              </motion.button>
+            </div>
           </div>
         </div>
       </div>

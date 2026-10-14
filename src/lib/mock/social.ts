@@ -50,8 +50,8 @@ export function buildSocialPost(category: Category, index: number, publishedAt: 
     id: `social-${category}-${index}`,
     source: "social",
     title: `${author}: ${text}`,
-    // The title already carries the post text; repeating it as the description only duplicated it on the card.
-    description: tag,
+    // The title carries the post text and the hashtags render as links, so there is nothing left to describe.
+    description: "",
     imageUrl: null,
     url: `https://example.com/social/${category}/${index}`,
     category,

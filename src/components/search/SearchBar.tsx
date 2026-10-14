@@ -23,6 +23,14 @@ export function SearchBar() {
   const pathname = usePathname();
   const committed = useAppSelector((state) => state.search.query);
   const [value, setValue] = useState(committed);
+  // The query can also change from outside (clicking a hashtag). Adjusting state during render
+  // (React's documented pattern) keeps the input in sync without an effect. The trim comparison
+  // stops our own debounced commit from eating a trailing space the user is still typing.
+  const [lastCommitted, setLastCommitted] = useState(committed);
+  if (committed !== lastCommitted) {
+    setLastCommitted(committed);
+    if (committed !== value.trim()) setValue(committed);
+  }
   const debounced = useDebouncedValue(value, SEARCH_DEBOUNCE_MS);
   const inputRef = useRef<HTMLInputElement>(null);
 
