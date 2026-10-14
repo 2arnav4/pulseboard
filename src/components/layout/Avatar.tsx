@@ -16,9 +16,10 @@ export const AVATAR_HEX: Record<AvatarColor, string> = {
   violet: "d08bf0",
 };
 
-// Only cheerful expressions: the style's full set includes sick, sad and crying faces.
-const HAPPY_EYES: funEmoji.Options["eyes"] = ["cute", "wink", "wink2", "plain", "glasses", "closed", "love", "stars", "shades", "closed2"];
-const HAPPY_MOUTHS: funEmoji.Options["mouth"] = ["lilSmile", "cute", "wideSmile", "smileTeeth", "smileLol", "tongueOut", "kissHeart", "shy"];
+// Only clearly happy expressions: the style's full set includes sick, sad and crying faces,
+// and its smaller smiles read as unsure at header size.
+const HAPPY_EYES: funEmoji.Options["eyes"] = ["cute", "wink", "closed", "love", "stars", "shades", "glasses"];
+const HAPPY_MOUTHS: funEmoji.Options["mouth"] = ["wideSmile", "smileTeeth", "smileLol", "cute", "tongueOut"];
 
 /**
  * Emoji face generated locally from the seed (no network request), so the same name always

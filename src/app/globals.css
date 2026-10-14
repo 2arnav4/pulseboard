@@ -72,7 +72,7 @@
   --color-movie: var(--movie);
   --color-social: var(--social);
   --color-ring: var(--ring);
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }

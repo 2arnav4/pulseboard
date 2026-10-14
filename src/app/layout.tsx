@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Geist_Mono, Inter } from "next/font/google";
 import { auth } from "@/auth";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { THEME_STORAGE_KEY } from "@/lib/persistence";
 import "./globals.css";
 
-const bodyFont = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
+const bodyFont = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const displayFont = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: ["latin"] });
 
