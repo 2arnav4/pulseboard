@@ -41,6 +41,7 @@ export function DashboardShell({ userId, children }: { userId: string; children:
             </div>
           )}
         </main>
+        <footer className="mx-auto w-full max-w-5xl px-4 pb-8 text-xs text-muted sm:px-8">{t("app.dataCredit")}</footer>
       </div>
     </div>
   );

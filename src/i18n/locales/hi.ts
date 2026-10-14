@@ -5,6 +5,7 @@ const hi: Translation = {
     name: "Pulseboard",
     tagline: "आपकी पसंद की ख़बरें, फ़िल्में और पोस्ट, एक ही जगह।",
     skipToContent: "मुख्य सामग्री पर जाएँ",
+    dataCredit: "समाचार NewsAPI से। यह उत्पाद TMDB API का उपयोग करता है, लेकिन TMDB द्वारा समर्थित या प्रमाणित नहीं है।",
   },
   nav: {
     feed: "मेरी फ़ीड",

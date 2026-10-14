@@ -3,6 +3,7 @@ const en = {
     name: "Pulseboard",
     tagline: "News, movies and posts that matter to you, in one place.",
     skipToContent: "Skip to main content",
+    dataCredit: "News from NewsAPI. This product uses the TMDB API but is not endorsed or certified by TMDB.",
   },
   nav: {
     feed: "My Feed",

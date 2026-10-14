@@ -5,6 +5,7 @@ const es: Translation = {
     name: "Pulseboard",
     tagline: "Noticias, películas y publicaciones que te importan, en un solo lugar.",
     skipToContent: "Saltar al contenido principal",
+    dataCredit: "Noticias de NewsAPI. Este producto usa la API de TMDB, pero TMDB no lo respalda ni lo certifica.",
   },
   nav: {
     feed: "Mi feed",
