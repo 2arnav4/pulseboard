@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ContentItem } from "@/types/content";
 
-type Feedback = "copied" | "failed" | null;
+type Feedback = "linkCopied" | "textCopied" | "failed" | null;
+
+const FEEDBACK_KEY = { linkCopied: "social.linkCopied", textCopied: "social.textCopied", failed: "social.shareFailed" } as const;
 
 /**
  * Native share sheet where the browser has one (mobile), otherwise copies the link.
+ * Items with no page of their own (mock social posts) share their text instead.
  * The result is announced through a status region.
  */
 export function ShareButton({ item }: { item: ContentItem }) {
@@ -21,9 +24,10 @@ export function ShareButton({ item }: { item: ContentItem }) {
   }, [feedback]);
 
   const share = async () => {
+    const payload = item.url ? { title: item.title, url: item.url } : { text: shareText(item) };
     if (typeof navigator.share === "function") {
       try {
-        await navigator.share({ title: item.title, url: item.url });
+        await navigator.share(payload);
         return;
       } catch (error) {
         // The user closed the share sheet: not an error worth showing.
@@ -31,8 +35,8 @@ export function ShareButton({ item }: { item: ContentItem }) {
       }
     }
     try {
-      await navigator.clipboard.writeText(item.url);
-      setFeedback("copied");
+      await navigator.clipboard.writeText(item.url || shareText(item));
+      setFeedback(item.url ? "linkCopied" : "textCopied");
     } catch {
       setFeedback("failed");
     }
@@ -50,9 +54,16 @@ export function ShareButton({ item }: { item: ContentItem }) {
       </button>
       <span role="status" className="pointer-events-none absolute -top-7 right-0 whitespace-nowrap text-xs">
         {feedback && (
-          <span className="rounded-full bg-ink px-2.5 py-1 text-ink-contrast">{t(feedback === "copied" ? "social.linkCopied" : "social.shareFailed")}</span>
+          <span className="rounded-full bg-ink px-2.5 py-1 text-ink-contrast">{t(FEEDBACK_KEY[feedback])}</span>
         )}
       </span>
     </span>
   );
+}
+
+function shareText(item: ContentItem): string {
+  const tags = item.hashtags ?? [];
+  // Mock titles already hold the post text; append tags only if the text doesn't contain them.
+  const missing = tags.filter((tag) => !item.title.toLowerCase().includes(tag));
+  return [item.title, ...missing].join(" ");
 }

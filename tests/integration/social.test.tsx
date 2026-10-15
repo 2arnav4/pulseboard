@@ -76,3 +76,23 @@ describe("PostComposer", () => {
     expect(store.getState().social.posts).toEqual([]);
   });
 });
+
+describe("cards without a page of their own", () => {
+  it("shows no external link on a mock social post and shares its text instead", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+    Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
+    renderWithProviders(<ContentCard item={socialItem} />);
+
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /^Share/ }));
+    expect(writeText).toHaveBeenCalledWith("@devdiaries: Shipped dark mode #webdev");
+    expect(await screen.findByText("Post copied")).toBeInTheDocument();
+  });
+
+  it("keeps the external link on news", () => {
+    renderWithProviders(<ContentCard item={newsItem} />);
+    expect(screen.getByRole("link", { name: /Read more/ })).toHaveAttribute("href", newsItem.url);
+  });
+});

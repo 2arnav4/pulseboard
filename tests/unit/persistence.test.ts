@@ -18,6 +18,14 @@ describe("persistence", () => {
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
   });
 
+  it("drops placeholder links from mock items saved by older versions", () => {
+    const legacy = { ...newsItem, id: "social-science-9", source: "social" as const, url: "https://example.com/social/science/9" };
+    savePersistedState(localStorage, key, { favorites: { items: [legacy, newsItem] } });
+    const [migrated, untouched] = loadPersistedState(localStorage, key)?.favorites?.items ?? [];
+    expect(migrated.url).toBe("");
+    expect(untouched.url).toBe(newsItem.url);
+  });
+
   it("returns null when nothing is stored", () => {
     expect(loadPersistedState(localStorage, key)).toBeNull();
   });

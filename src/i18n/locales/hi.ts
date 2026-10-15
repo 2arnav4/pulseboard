@@ -181,6 +181,7 @@ const hi: Translation = {
     share: "शेयर",
     shareLabel: "“{{title}}” शेयर करें",
     linkCopied: "लिंक कॉपी हो गया",
+    textCopied: "पोस्ट कॉपी हो गई",
     shareFailed: "लिंक कॉपी नहीं हो सका",
     delete: "हटाएँ",
     deleteLabel: "अपनी पोस्ट “{{title}}” हटाएँ",

@@ -131,6 +131,23 @@ describe("content service", () => {
     const likes = page.items.map((item) => item.likes ?? 0);
     expect(likes).toEqual([...likes].sort((a, b) => b - a));
   });
+
+  it("serves mock social posts with unique text and no placeholder links", async () => {
+    const { MOCK_SOCIAL } = await import("@/lib/mock/social");
+    const { MOCK_NEWS } = await import("@/lib/mock/news");
+    const texts = MOCK_SOCIAL.map((post) => post.title.split(": ").slice(1).join(": "));
+    expect(new Set(texts).size).toBe(texts.length);
+    expect([...MOCK_SOCIAL, ...MOCK_NEWS].every((item) => item.url === "")).toBe(true);
+  });
+
+  it("pushes real-time posts whose text is not already in the feed", async () => {
+    const { MOCK_SOCIAL } = await import("@/lib/mock/social");
+    const { nextLivePost } = await import("@/lib/server/realtime");
+    const feedTitles = new Set(MOCK_SOCIAL.map((post) => post.title));
+    const live = Array.from({ length: 6 }, (_, index) => nextLivePost(["technology", "sports"], new Date(Date.UTC(2026, 9, 15, 9, index))));
+    expect(live.every((post) => !feedTitles.has(post.title) && post.url === "" && post.likes === 0)).toBe(true);
+    expect(new Set(live.map((post) => post.id)).size).toBe(live.length);
+  });
 });
 
 describe("request validation", () => {

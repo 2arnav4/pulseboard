@@ -1,5 +1,5 @@
 import "server-only";
-import { buildSocialPost, SOCIAL_POST_COUNT_PER_CATEGORY } from "@/lib/mock/social";
+import { buildLivePost } from "@/lib/mock/social";
 import type { Category, ContentItem } from "@/types/content";
 
 let sequence = 0;
@@ -8,8 +8,7 @@ let sequence = 0;
 export function nextLivePost(categories: readonly Category[], now = new Date()): ContentItem {
   sequence += 1;
   const category = categories[sequence % categories.length];
-  const template = buildSocialPost(category, sequence % SOCIAL_POST_COUNT_PER_CATEGORY, now.toISOString());
-  return { ...template, id: `social-live-${now.getTime()}-${sequence}`, likes: 0 };
+  return buildLivePost(category, sequence, now.toISOString());
 }
 
 /** Serialize one Server-Sent Event frame. */

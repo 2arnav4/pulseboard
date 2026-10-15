@@ -105,19 +105,21 @@ export function ContentCard({ item, layout = "grid", reorderControls }: ContentC
                 {t("social.delete")}
               </button>
             ) : (
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => dispatch(itemOpened(item))}
-                className="group/cta inline-flex min-h-9 items-center gap-1 text-sm font-medium text-text underline decoration-border underline-offset-4 transition-colors hover:decoration-text"
-              >
-                {t(CTA_KEY[item.source])}
-                <span aria-hidden="true" className="inline-block transition-transform group-hover/cta:translate-x-0.5">
-                  →
-                </span>
-                <span className="sr-only"> {t("card.opensInNewTab")}</span>
-              </a>
+              item.url && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => dispatch(itemOpened(item))}
+                  className="group/cta inline-flex min-h-9 items-center gap-1 text-sm font-medium text-text underline decoration-border underline-offset-4 transition-colors hover:decoration-text"
+                >
+                  {t(CTA_KEY[item.source])}
+                  <span aria-hidden="true" className="inline-block transition-transform group-hover/cta:translate-x-0.5">
+                    →
+                  </span>
+                  <span className="sr-only"> {t("card.opensInNewTab")}</span>
+                </a>
+              )
             )}
 
             {item.rating !== undefined && (

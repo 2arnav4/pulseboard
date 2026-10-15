@@ -21,6 +21,7 @@ export interface ContentItem {
   title: string;
   description: string;
   imageUrl: string | null;
+  /** The original article or title page; empty when there is none (mock social posts, demo news, your own posts). */
   url: string;
   category: Category;
   publishedAt: string;

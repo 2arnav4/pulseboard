@@ -18,13 +18,17 @@ export interface PersistedState {
   social?: SocialState;
 }
 
+/** The exact placeholder pattern the old mock social and demo news data used. */
+const LEGACY_PLACEHOLDER_URL = /^https:\/\/example\.com\/(social|news)\//;
+
 const contentItemSchema: z.ZodType<ContentItem> = z.object({
   id: z.string(),
   source: z.enum(CONTENT_SOURCES),
   title: z.string(),
   description: z.string(),
   imageUrl: z.string().nullable(),
-  url: z.string(),
+  // Mock items saved before 15 Oct 2026 carry example.com placeholder links; drop them on load.
+  url: z.string().transform((url) => (LEGACY_PLACEHOLDER_URL.test(url) ? "" : url)),
   category: z.enum(CATEGORIES),
   publishedAt: z.string(),
   author: z.string().nullable(),

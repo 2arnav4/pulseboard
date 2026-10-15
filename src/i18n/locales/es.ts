@@ -181,6 +181,7 @@ const es: Translation = {
     share: "Compartir",
     shareLabel: "Compartir “{{title}}”",
     linkCopied: "Enlace copiado",
+    textCopied: "Publicación copiada",
     shareFailed: "No se pudo copiar el enlace",
     delete: "Eliminar",
     deleteLabel: "Eliminar tu publicación “{{title}}”",

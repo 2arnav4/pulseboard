@@ -40,6 +40,15 @@ describe("matchesQuery", () => {
     expect(matchesQuery(item, "   ")).toBe(true);
     expect(matchesQuery(item, "football")).toBe(false);
   });
+
+  it("matches at the start of a word only, so short queries don't hit the middle of words", () => {
+    const post = makeItem({ id: "y", title: "Training camp starts Monday", hashtags: ["#ai"] });
+    expect(matchesQuery(post, "ai")).toBe(true); // the #ai tag
+    expect(matchesQuery(makeItem({ id: "z", title: "Training camp" }), "ai")).toBe(false);
+    expect(matchesQuery(post, "camp")).toBe(true);
+    expect(matchesQuery(post, "train")).toBe(true);
+    expect(matchesQuery(post, "(")).toBe(false);
+  });
 });
 
 describe("applyCustomOrder", () => {

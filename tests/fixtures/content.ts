@@ -24,6 +24,8 @@ export const socialItem = makeItem({
   id: "social-tech-1",
   source: "social",
   title: "@devdiaries: Shipped dark mode",
+  // Mock social posts have no page elsewhere, like the real mock API.
+  url: "",
   hashtags: ["#webdev"],
   likes: 1200,
 });

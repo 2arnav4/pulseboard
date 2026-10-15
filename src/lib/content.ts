@@ -23,14 +23,18 @@ export function paginate<T>(items: readonly T[], page: number, pageSize: number)
   return { items: items.slice(start, start + pageSize), hasMore: start + pageSize < items.length };
 }
 
-/** Case-insensitive match against title, description, author and hashtags. */
+/**
+ * Case-insensitive match against title, description, author and hashtags, at the start of a
+ * word: "ai" finds "AI tools" and "#ai" but not "Training". Prefixes still work ("foot" → "football").
+ */
 export function matchesQuery(item: ContentItem, query: string): boolean {
   const needle = query.trim().toLowerCase();
   if (!needle) return true;
   const haystack = [item.title, item.description, item.author ?? "", ...(item.hashtags ?? [])]
     .join(" ")
     .toLowerCase();
-  return haystack.includes(needle);
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?<![\\p{L}\\p{M}\\p{N}])${escaped}`, "u").test(haystack);
 }
 
 /** Drop later duplicates by id, keeping the first occurrence's position. */

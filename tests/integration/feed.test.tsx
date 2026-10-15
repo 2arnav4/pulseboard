@@ -19,7 +19,8 @@ describe("FeedView", () => {
     expect(screen.getByRole("heading", { name: "@devdiaries: Shipped dark mode" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Read more/ })).toHaveAttribute("rel", "noopener noreferrer");
     expect(screen.getByRole("link", { name: /Play now/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /View post/ })).toBeInTheDocument();
+    // Mock social posts have nowhere to link to, so they get no "View post" link.
+    expect(screen.queryByRole("link", { name: /View post/ })).not.toBeInTheDocument();
   });
 
   it("does not request data before saved preferences are hydrated", async () => {

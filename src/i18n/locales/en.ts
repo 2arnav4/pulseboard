@@ -179,6 +179,7 @@ const en = {
     share: "Share",
     shareLabel: "Share “{{title}}”",
     linkCopied: "Link copied",
+    textCopied: "Post copied",
     shareFailed: "Couldn't copy the link",
     delete: "Delete",
     deleteLabel: "Delete your post “{{title}}”",

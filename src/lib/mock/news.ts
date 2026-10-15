@@ -78,7 +78,8 @@ function buildMockNews(): ContentItem[] {
         title,
         description: `${title}. Demo article generated locally because a live NewsAPI response was not available.`,
         imageUrl: null,
-        url: `https://example.com/news/${category}/${index}`,
+        // Demo articles have no real page; the card hides its "Read more" link.
+        url: "",
         category,
         publishedAt: hoursAgo(index * 3 + Math.floor(random() * 3)),
         author: pick(OUTLETS, random),
